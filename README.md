@@ -98,7 +98,7 @@ uv run kokoro --text "Hallo Welt" -o output.wav -l d --voice dm_daniel
 ```
 kokoro/              # Kokoro TTS inference package (from hexgrad/kokoro, lightly modified)
 kokoro.js/           # Kokoro JS/TS package (from hexgrad/kokoro, unmodified)
-StyleTTS2/           # Training code (git submodule from semidark/StyleTTS2, kokoro-deutsch branch)
+StyleTTS2/           # Training code (git submodule from semidark/StyleTTS2, main branch)
 scripts/             # Original: dataset prep, voicepack extraction, inference testing
 configs/             # Original: training configuration
 docs/                # Original: training guide and documentation

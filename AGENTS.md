@@ -5,7 +5,7 @@
 kokoro-deutsch is a training recipe for fine-tuning [Kokoro TTS](https://github.com/hexgrad/kokoro) (82M parameters, based on StyleTTS 2) for German. The project contains:
 
 - A lightly modified copy of the `kokoro/` inference package (German language code added)
-- A patched fork of `StyleTTS2/` as a git submodule (`semidark/StyleTTS2`, branch `kokoro-deutsch`)
+- A patched fork of `StyleTTS2/` as a git submodule (`semidark/StyleTTS2`, branch `main`)
 - Original scripts for dataset preparation, voicepack extraction, and inference testing
 - A comprehensive training guide documenting every step and bug fix
 
@@ -157,7 +157,7 @@ kokoro/              # Inference package (from hexgrad/kokoro, German lang code 
   modules.py         # CustomAlbert, ProsodyPredictor, TextEncoder
   istftnet.py        # ISTFT-based vocoder (Decoder, Generator, TorchSTFT)
   custom_stft.py     # ONNX-compatible STFT (no unfold/complex ops)
-StyleTTS2/           # Training code (git submodule: semidark/StyleTTS2, branch kokoro-deutsch)
+StyleTTS2/           # Training code (git submodule: semidark/StyleTTS2, branch main)
 scripts/             # Original: dataset prep, voicepack extraction, inference testing
   prepare_dataset.py # Audio processing + IPA phonemization pipeline
   prepare_training.py# Train/val split, mel/F0 precomputation, weight conversion
@@ -209,7 +209,7 @@ Do NOT revert these imports. The old API produces state dict keys (`weight_g`/`w
 
 ### Key patches applied to upstream StyleTTS2
 
-All patches are committed on the `kokoro-deutsch` branch of `semidark/StyleTTS2`:
+All patches are committed on the `main` branch of `semidark/StyleTTS2`:
 
 - `text_utils.py` — imports from `kokoro_symbols.py` instead of default symbols
 - `meldataset.py` — filters sequences > 510 tokens (PLBERT max_position_embeddings)
