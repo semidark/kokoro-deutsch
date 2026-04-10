@@ -1,0 +1,55 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# kokoro-deutsch .gitignore
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual environments ────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Linter / tool caches ───────────────────────────────────────────────────
+.ruff_cache/
+.mypy_cache/
+
+# ── Dataset (not redistributable — see README) ─────────────────────────────
+dataset/audio/
+
+# ── Training artifacts (large binary files) ─────────────────────────────────
+training/kokoro_base.pth
+training/mels/
+training/f0/
+
+# ── Training checkpoints and logs ───────────────────────────────────────────
+StyleTTS2/logs/
+
+# ── Test output (generated WAVs and converted models) ───────────────────────
+test_output/
+
+# ── Voicepacks (derived from non-redistributable data) ─────────────────────
+voices/*.pt
+
+# ── Backup and temp files ───────────────────────────────────────────────────
+*.bak
+*.org
+*.backup
+*.swp
+*.swo
+*~
+
+# ── Editor / IDE ────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.code-workspace
+
+# ── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

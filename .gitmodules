@@ -1,0 +1,4 @@
+[submodule "StyleTTS2"]
+	path = StyleTTS2
+	url = https://github.com/semidark/StyleTTS2.git
+	branch = kokoro-deutsch

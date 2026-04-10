@@ -1,0 +1,151 @@
+batch_size: 4
+epochs: 10
+epochs_1st: 10
+epochs_2nd: 10
+save_freq: 1
+pretrained_model: "../training/kokoro_base.pth"
+first_stage_path: "first_stage.pth"
+load_only_params: true
+# ─────────────────────────────────────────────────────────────────────────────
+# Kokoro German Fine-Tuning Config
+# ─────────────────────────────────────────────────────────────────────────────
+# Based on StyleTTS2 config_ft.yml, adapted for:
+# - Kokoro-82M architecture (ISTFTNet vocoder, no diffusion)
+# - German single-speaker fine-tuning (28h Daniel)
+# - Conservative fine-tuning from pre-trained English checkpoint
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+log_dir: "logs/kokoro_german"
+
+# ── Data ─────────────────────────────────────────────────────────────────────
+data_params:
+  train_data: "../training/train_list.txt"
+  val_data: "../training/val_list.txt"
+  root_path: "../dataset/audio"
+  OOD_data: "../training/OOD_texts.txt"
+  min_length: 50                    # min phoneme sequence length (chars)
+
+# ── Preprocessing ────────────────────────────────────────────────────────────
+preprocess_params:
+  sr: 24000
+  spect_params:
+    n_fft: 2048
+    win_length: 1200
+    hop_length: 300
+    n_mels: 80
+    fmin: 0
+    fmax: 8000
+
+# ── Model Architecture ──────────────────────────────────────────────────────
+# Must match Kokoro-82M exactly to load pre-trained weights
+model_params:
+  dim_in: 64
+  n_token: 178                      # phoneme vocabulary size (IPA + punctuation)
+  hidden_dim: 512                   # model hidden dimension
+  style_dim: 128                    # style/speaker embedding dimension (x2 = 256 total in voicepack)
+  max_dur: 50                       # max duration per phoneme (in frames)
+  multispeaker: false               # single speaker fine-tuning
+  n_mels: 80                        # mel spectrogram bands
+  dropout: 0.2
+  n_layer: 3                        # number of layers in text encoder / predictor
+  text_encoder_kernel_size: 5
+
+  decoder:
+    type: istftnet                  # Kokoro uses ISTFTNet, NOT hifigan
+    upsample_rates: [10, 6]
+    upsample_kernel_sizes: [20, 12]
+    upsample_initial_channel: 512
+    resblock_kernel_sizes: [3, 7, 11]
+    resblock_dilation_sizes: [[1, 3, 5], [1, 3, 5], [1, 3, 5]]
+    gen_istft_n_fft: 20
+    gen_istft_hop_size: 5
+
+  # PLBERT config (phoneme-level BERT for text understanding)
+  diffusion:
+    embedding_mask_proba: 0.1
+    transformer:
+      num_layers: 3
+      num_heads: 8
+      head_features: 64
+      multiplier: 2
+    dist:
+      sigma_data: 0.2
+      estimate_sigma_data: true
+      mean: -3.0
+      std: 1.0
+
+  plbert:
+    hidden_size: 768
+    num_attention_heads: 12
+    intermediate_size: 2048
+    max_position_embeddings: 512
+    num_hidden_layers: 12
+    dropout: 0.1
+
+  # SLM discriminator (WavLM) — used in stage 2 only
+  slm:
+    model: "microsoft/wavlm-base-plus"
+    sr: 16000
+    hidden: 768
+    nlayers: 13
+    initial_channel: 64
+
+# ── Loss Weights ─────────────────────────────────────────────────────────────
+loss_params:
+  lambda_gen: 1.0
+  lambda_mel: 5.0                   # mel reconstruction loss
+  lambda_dur: 1.0                   # duration prediction loss
+  lambda_ce: 20.0                   # duration cross-entropy loss
+  lambda_F0: 1.0                    # F0 (pitch) prediction loss
+  lambda_norm: 1.0                  # energy/norm prediction loss
+  lambda_s2s: 1.0                   # sequence-to-sequence loss
+  lambda_mono: 1.0                  # monotonic alignment loss
+  lambda_slm: 0.0                   # SLM adversarial (0 = disabled for stage 1)
+  lambda_diff: 0.0                  # diffusion loss (0 = disabled, no diffusion)
+  lambda_sty: 0.0                   # style reconstruction (0 = disabled)
+  TMA_epoch: 0                      # start alignment from epoch 0 (fine-tuning, not training from scratch)
+  diff_epoch: 999                   # effectively disable diffusion training
+  joint_epoch: 999                  # effectively disable SLM joint training
+
+# ── Optimizer ────────────────────────────────────────────────────────────────
+optimizer_params:
+  lr: 0.0001                        # main learning rate
+  bert_lr: 0.00001                  # lower LR for PLBERT (mostly frozen knowledge)
+  ft_lr: 0.0001                     # fine-tuning LR for acoustic modules
+
+# ── Training Schedule ────────────────────────────────────────────────────────
+training:
+  epochs: 10                        # 10 epochs of 28h data = plenty
+  batch_size: 4                     # conservative for 12GB VRAM; increase on A100
+  save_freq: 2                      # save checkpoint every N epochs
+  log_interval: 10                  # log every N steps
+  eval_interval: 500                # evaluate every N steps
+
+  # Pre-trained model loading
+  pretrained_model: "../training/kokoro_base.pth"
+  load_only_params: true            # ignore missing keys (diffusion, SLM discriminator)
+  second_stage_load_pretrained: true
+
+# ── Pitch Extractor ──────────────────────────────────────────────────────────
+# StyleTTS2 uses JDC pitch extractor
+# If Utils/JDC/bst.t7 is not available, the training code falls back to other methods
+F0_path: "Utils/JDC/bst.t7"
+
+# ── ASR Alignment Model ─────────────────────────────────────────────────────
+# StyleTTS2's pre-trained alignment model (English)
+# May need to be adapted for German or set TMA_epoch=0 to learn from scratch
+ASR_config: "Utils/ASR/config.yml"
+ASR_path: "Utils/ASR/epoch_00080.pth"
+
+# ── PLBERT ───────────────────────────────────────────────────────────────────
+PLBERT_dir: "Utils/PLBERT/"
+
+slmadv_params:
+  min_len: 100
+  max_len: 500
+  batch_percentage: 0.5
+  iter: 10
+  thresh: 5
+  scale: 0.01
+  sig: 1.5

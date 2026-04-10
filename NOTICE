@@ -1,0 +1,69 @@
+kokoro-deutsch
+Copyright 2026 semidark
+
+This project contains code from the following open-source projects:
+
+────────────────────────────────────────────────────────────────────────────────
+
+kokoro/ — Kokoro TTS inference package
+  Source:  https://github.com/hexgrad/kokoro
+  License: Apache License 2.0
+  Author:  hexgrad
+  Changes: Added German language code ('d') to pipeline.py and modules.py.
+           Custom loguru handler in __init__.py. Minor formatting changes.
+
+────────────────────────────────────────────────────────────────────────────────
+
+kokoro.js/ — Kokoro TTS JavaScript package
+  Source:  https://github.com/hexgrad/kokoro
+  License: Apache License 2.0
+  Author:  hexgrad
+  Changes: None (included unmodified for convenience).
+
+────────────────────────────────────────────────────────────────────────────────
+
+demo/ — Gradio web demo
+  Source:  https://github.com/hexgrad/kokoro
+  License: Apache License 2.0
+  Author:  hexgrad
+  Changes: None (included unmodified for convenience).
+
+────────────────────────────────────────────────────────────────────────────────
+
+examples/ — Usage examples
+  Source:  https://github.com/hexgrad/kokoro
+  License: Apache License 2.0
+  Author:  hexgrad
+  Changes: None (included unmodified for convenience).
+
+────────────────────────────────────────────────────────────────────────────────
+
+tests/test_custom_stft.py — STFT unit tests
+  Source:  https://github.com/hexgrad/kokoro
+  License: Apache License 2.0
+  Author:  hexgrad
+  Changes: None.
+
+────────────────────────────────────────────────────────────────────────────────
+
+StyleTTS2/ — Training code (git submodule)
+  Source:  https://github.com/yl4579/StyleTTS2
+  Fork:    https://github.com/semidark/StyleTTS2 (branch: kokoro-deutsch)
+  License: MIT License
+  Author:  Yinghao Aaron Li (yl4579)
+  Changes: See the commit history on the kokoro-deutsch branch for a full
+           list of patches. Summary:
+           - Migrated weight_norm/spectral_norm to parametrizations API
+           - Fixed multiple training bugs (F0 shape, checkpoint save order,
+             missing .train() mode, hardcoded breakpoint, torch.load defaults)
+           - Added Kokoro-82M symbol table (kokoro_symbols.py)
+           - Filtered sequences exceeding PLBERT max length (meldataset.py)
+
+────────────────────────────────────────────────────────────────────────────────
+
+The following directories contain original work by this project's contributors:
+
+  scripts/     — Dataset preparation, voicepack extraction, inference testing
+  configs/     — Training configuration for German fine-tuning
+  docs/        — Training guide and documentation
+  training/    — Training data lists and OOD texts (audio files excluded)
