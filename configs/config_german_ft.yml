@@ -101,12 +101,12 @@ loss_params:
   lambda_norm: 1.0                  # energy/norm prediction loss
   lambda_s2s: 1.0                   # sequence-to-sequence loss
   lambda_mono: 1.0                  # monotonic alignment loss
-  lambda_slm: 0.0                   # SLM adversarial (0 = disabled for stage 1)
+  lambda_slm: 1.0                   # SLM adversarial (0 = disabled for stage 1)
   lambda_diff: 0.0                  # diffusion loss (0 = disabled, no diffusion)
   lambda_sty: 0.0                   # style reconstruction (0 = disabled)
   TMA_epoch: 0                      # start alignment from epoch 0 (fine-tuning, not training from scratch)
   diff_epoch: 999                   # effectively disable diffusion training
-  joint_epoch: 999                  # effectively disable SLM joint training
+  joint_epoch: 3                    # start SLM joint training
 
 # ── Optimizer ────────────────────────────────────────────────────────────────
 optimizer_params:

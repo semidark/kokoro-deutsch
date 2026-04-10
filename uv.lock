@@ -457,8 +457,8 @@ wheels = [
 ]
 
 [[package]]
-name = "kokoro"
-version = "0.9.4"
+name = "kokoro-deutsch"
+version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "huggingface-hub" },
