@@ -81,7 +81,9 @@ Both are mandatory. `espeak-ng` drives the IPA phonemization (`misaki`). `libsnd
 
 ### Python Environment
 
-This project uses `uv`. The training environment for StyleTTS2 is separate and uses a venv:
+This project uses `uv`. **Python 3.10–3.13 required** (tested on 3.13.12; see `requires-python` in `pyproject.toml`).
+
+The training environment for StyleTTS2 is separate and uses a venv:
 
 ```bash
 # For StyleTTS2 training (in a venv or conda env):
