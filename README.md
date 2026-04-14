@@ -34,20 +34,45 @@ Dataset preparation -> Weight conversion -> Stage 1 training -> Stage 2 training
 
 See [docs/TRAINING_GUIDE.md](docs/TRAINING_GUIDE.md) for the complete technical breakdown.
 
-### Training progress
+## Published Models
 
-| Stage | Epochs | Status | Audio quality |
-|-------|--------|--------|---------------|
-| Stage 1 (decoder) | 10/10 | ✅ Complete | Intelligible, improving |
-| Stage 2 (prosody) | In progress | ✅ Running | Intelligible with learned prosody |
+### 🎉 German Multi-Speaker Base Model (Stage 1)
 
-Stage 1 TensorBoard loss curves:
+**dida-80b/kokoro-deutsch-hui-base** is now available on HuggingFace!
 
-![Stage 1 losses](docs/images/tensorboard_stage1.png)
+A speaker-neutral German Stage 1 base model built on Kokoro-82M, trained on 51 speakers from the HUI Audio Corpus (CC0).
 
-Stage 2 TensorBoard (showing successful training with kokoro-faithful inference):
+| Specification | Value |
+|---|---|
+| **Speakers** | 51 (24M / 27F) |
+| **Training Audio** | ~51 hours (effective) |
+| **Train Samples** | 20,495 |
+| **Val Samples** | 418 |
+| **Final Mel Loss** | 0.3264 (−44% from start) |
+| **License** | CC0-1.0 |
+| **Model** | [dida-80b/kokoro-deutsch-hui-base](https://huggingface.co/dida-80b/kokoro-deutsch-hui-base) |
+| **Dataset** | [dida-80b/hui-german-51speakers](https://huggingface.co/datasets/dida-80b/hui-german-51speakers) |
 
-![Stage 2 losses](docs/images/tensorboard_stage2-try2-epoch2.png)
+**This is a base model, not a voice.** Use it as the foundation for Stage 2 fine-tuning with your own speaker data (2–5 hours of recordings). A base model trained on a single voice is biased toward that voice — this one isn't.
+
+### Training Methodology
+
+**Quality Filtering**
+- Automated filter: duration 1–20s, RMS ≥−42 dB, clipping ≤0.1%, silence ≤50%
+- Manual review: all 51 speakers individually verified
+- Minimum threshold: 5 minutes per speaker (per Fraunhofer/IIS research on speaker embedding convergence)
+
+**Duration Capping**
+- 60 minutes per speaker to prevent dominant speakers from biasing the model
+- Bernd_Ungerer alone contributed 81h raw — capped to 60h
+- 60 min/speaker is 3.6× the VCTK gold standard (~24 min/speaker)
+
+**Weighted Sampling**
+- Small speakers duplicated so all 51 appear equally often in batches
+- Formula: `weight = 60 min / speaker_duration`
+- All speaker embeddings receive identical gradient update rates
+
+See [issue #9](https://github.com/semidark/kokoro-deutsch/issues/9) for the complete training log and methodology.
 
 ## Dataset
 
@@ -99,6 +124,26 @@ The full training process is documented in **[docs/TRAINING_GUIDE.md](docs/TRAIN
 7. Voicepack extraction
 8. AMD ROCm-specific notes
 
+### Fine-Tuning from the Base Model
+
+To create your own German Kokoro voice using the published base model:
+
+```bash
+# Download the base checkpoint
+wget https://huggingface.co/dida-80b/kokoro-deutsch-hui-base/resolve/main/first_stage.pth
+
+# Place it in your training directory
+mv first_stage.pth StyleTTS2/weights/
+
+# Configure Stage 2 training
+# In configs/config_german_ft.yml:
+#   pretrained_model: first_stage.pth
+#   second_stage_load_pretrained: false
+#   joint_epoch: 3  # Enable adversarial training
+```
+
+Train Stage 2 with 2–5 hours of your own recordings to get a personalized German voice.
+
 ### Inference (once trained)
 
 ```bash
@@ -137,7 +182,7 @@ See the [GitHub Issues](https://github.com/semidark/kokoro-deutsch/issues) for t
 
 - [hexgrad](https://github.com/hexgrad) for [Kokoro](https://github.com/hexgrad/kokoro) and [misaki](https://github.com/hexgrad/misaki)
 - [yl4579](https://github.com/yl4579) for [StyleTTS 2](https://github.com/yl4579/StyleTTS2)
-- [dida-80b](https://github.com/dida-80b) for debugging insights on `style_encoder` loading and `joint_epoch` behavior
+- [dida-80b](https://github.com/dida-80b) for training and publishing the [German multi-speaker base model](https://huggingface.co/dida-80b/kokoro-deutsch-hui-base)
 
 ## License
 
