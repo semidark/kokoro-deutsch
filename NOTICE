@@ -9,40 +9,8 @@ kokoro/ — Kokoro TTS inference package
   Source:  https://github.com/hexgrad/kokoro
   License: Apache License 2.0
   Author:  hexgrad
-  Changes: Added German language code ('d') to pipeline.py and modules.py.
+  Changes: Added German language code ('d') to pipeline.py and __main__.py.
            Custom loguru handler in __init__.py. Minor formatting changes.
-
-────────────────────────────────────────────────────────────────────────────────
-
-kokoro.js/ — Kokoro TTS JavaScript package
-  Source:  https://github.com/hexgrad/kokoro
-  License: Apache License 2.0
-  Author:  hexgrad
-  Changes: None (included unmodified for convenience).
-
-────────────────────────────────────────────────────────────────────────────────
-
-demo/ — Gradio web demo
-  Source:  https://github.com/hexgrad/kokoro
-  License: Apache License 2.0
-  Author:  hexgrad
-  Changes: None (included unmodified for convenience).
-
-────────────────────────────────────────────────────────────────────────────────
-
-examples/ — Usage examples
-  Source:  https://github.com/hexgrad/kokoro
-  License: Apache License 2.0
-  Author:  hexgrad
-  Changes: None (included unmodified for convenience).
-
-────────────────────────────────────────────────────────────────────────────────
-
-tests/test_custom_stft.py — STFT unit tests
-  Source:  https://github.com/hexgrad/kokoro
-  License: Apache License 2.0
-  Author:  hexgrad
-  Changes: None.
 
 ────────────────────────────────────────────────────────────────────────────────
 

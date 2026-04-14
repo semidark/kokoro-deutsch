@@ -7,9 +7,7 @@ kokoro-deutsch is a training recipe for fine-tuning [Kokoro TTS](https://github.
 - A lightly modified copy of the `kokoro/` inference package (German language code added)
 - A patched fork of `StyleTTS2/` as a git submodule (`semidark/StyleTTS2`, branch `main`)
 - Original scripts for dataset preparation, voicepack extraction, and inference testing
-- A comprehensive training guide documenting every step and bug fix
-
-Unmodified upstream code (`kokoro.js/`, `demo/`, `examples/`, `tests/`) is included for convenience. See `NOTICE` for full attribution.
+- Training and troubleshooting docs split by purpose
 
 - **Primary language:** Python 3.10–3.13
 - **Package manager:** `uv` (lockfile: `uv.lock`)
@@ -37,30 +35,12 @@ uv pip install -e .
 
 ## Running Tests
 
-```bash
-# Run all Python tests
-uv run pytest tests/
+No repository-level test suite is currently maintained in this repo.
 
-# Run a single test file
-uv run pytest tests/test_custom_stft.py
+To validate training/inference changes, use:
 
-# Run a single test function
-uv run pytest tests/test_custom_stft.py::test_stft_reconstruction
-
-# Run with verbose output
-uv run pytest tests/test_custom_stft.py -v
-```
-
-There is no pytest configuration in `pyproject.toml` — default pytest settings apply.
-
-### JavaScript tests (kokoro.js/)
-
-```bash
-# From kokoro.js/ directory
-npm test          # runs: vitest run
-npm run build     # rollup + tsc
-npm run format    # prettier --write . --print-width 1000
-```
+- Smoke training runs in `StyleTTS2/`
+- `scripts/test_inference.py` for checkpoint conversion + inference checks
 
 ## CLI Usage
 
@@ -139,13 +119,6 @@ No linter or formatter is configured. Follow the existing conventions observed i
 - Google-style docstrings with `Args:`, `Returns:`, `Raises:` sections on some methods.
 - Inline comments for non-obvious logic (e.g., STFT math, timestamp calculations).
 
-### JavaScript (kokoro.js/)
-
-- **Formatter:** Prettier with `--print-width 1000` (very long lines are intentional).
-- **Test framework:** vitest.
-- **Module system:** ES modules (`"type": "module"`).
-- **Build:** Rollup (CJS + ESM + web bundle).
-
 ## Project Structure
 
 ```
@@ -166,14 +139,11 @@ scripts/             # Original: dataset prep, voicepack extraction, inference t
 configs/             # Training configuration
   config_german_ft.yml # StyleTTS2 config for German fine-tuning
 training/            # Training data lists, OOD texts, config (large files excluded)
-docs/                # Training guide and documentation
-  TRAINING_GUIDE.md  # Comprehensive fine-tuning guide
+docs/                # Documentation
+  TRAINING_GUIDE.md  # Step-by-step training flow
+  TROUBLESHOOTING.md # Debugging failures and fixes
+  ARCHITECTURE.md    # Technical compatibility reference
   images/            # TensorBoard screenshots
-tests/               # Python tests (from hexgrad/kokoro, unmodified)
-demo/                # Gradio web demo (from hexgrad/kokoro, unmodified)
-examples/            # Usage examples (from hexgrad/kokoro, unmodified)
-kokoro.js/           # JS/TS package (from hexgrad/kokoro, unmodified)
-voices/              # Voicepack .pt files (excluded from git)
 ```
 
 ## Key Technical Details
