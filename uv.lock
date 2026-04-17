@@ -463,7 +463,7 @@ source = { editable = "." }
 dependencies = [
     { name = "huggingface-hub" },
     { name = "loguru" },
-    { name = "misaki", extra = ["en"] },
+    { name = "misaki", extra = ["de", "en"] },
     { name = "numpy" },
     { name = "torch" },
     { name = "transformers" },
@@ -473,7 +473,7 @@ dependencies = [
 requires-dist = [
     { name = "huggingface-hub" },
     { name = "loguru" },
-    { name = "misaki", extras = ["en"], specifier = ">=0.9.4" },
+    { name = "misaki", extras = ["en", "de"], git = "https://github.com/semidark/misaki.git?branch=main" },
     { name = "numpy" },
     { name = "torch" },
     { name = "transformers" },
@@ -753,23 +753,26 @@ wheels = [
 [[package]]
 name = "misaki"
 version = "0.9.4"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/semidark/misaki.git?branch=main#7e36194acec84e5f7959715fabb2ba56d9b2710b" }
 dependencies = [
     { name = "addict" },
+    { name = "pip" },
     { name = "regex" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/1a/c7/fb01370a76585b46595a01b52f18e65c8ba6d7a313a05e5d9fff0a8e1c69/misaki-0.9.4.tar.gz", hash = "sha256:3960fa3e6de179a90ee8e628446a4a4f6b8c730b6e3410999cf396189f4d9c40", size = 3756765, upload-time = "2025-04-05T21:57:14.186Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/82/ec/0ee4110ddb54278b8f21c40a140370ae8f687036c4edf578316602697c56/misaki-0.9.4-py3-none-any.whl", hash = "sha256:90e2eeb169786c014c429e5058d2ea6bcd02d651f2a24450ba6c9ffc0f8da15a", size = 3617774, upload-time = "2025-04-05T21:57:10.678Z" },
 ]
 
 [package.optional-dependencies]
+de = [
+    { name = "espeakng-loader" },
+    { name = "phonemizer-fork" },
+]
 en = [
     { name = "espeakng-loader" },
     { name = "num2words" },
     { name = "phonemizer-fork" },
     { name = "spacy" },
     { name = "spacy-curated-transformers" },
+    { name = "torch" },
+    { name = "transformers" },
 ]
 
 [[package]]
@@ -1026,6 +1029,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/42/fa/9294d2f11890ca49d0bdac7a4da60cbe5686629bfd4987cae0ad75e051cc/phonemizer_fork-3.3.2.tar.gz", hash = "sha256:10e16e827d0443b087062e21b55e805c00989cf1343b2e81e734cae5f6c0cf69", size = 300989, upload-time = "2025-01-30T13:02:31.201Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/64/f1/0dcce21b0ae16a82df4b6583f8f3ad8e55b35f7e98b6bf536a4dd225fa08/phonemizer_fork-3.3.2-py3-none-any.whl", hash = "sha256:97305c76f4183b3825dae8f4c032265fe78c9946ce58c47d4b62161349264b74", size = 82700, upload-time = "2025-01-30T13:02:28.667Z" },
+]
+
+[[package]]
+name = "pip"
+version = "26.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/48/83/0d7d4e9efe3344b8e2fe25d93be44f64b65364d3c8d7bc6dc90198d5422e/pip-26.0.1.tar.gz", hash = "sha256:c4037d8a277c89b320abe636d59f91e6d0922d08a05b60e85e53b296613346d8", size = 1812747, upload-time = "2026-02-05T02:20:18.702Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/de/f0/c81e05b613866b76d2d1066490adf1a3dbc4ee9d9c839961c3fc8a6997af/pip-26.0.1-py3-none-any.whl", hash = "sha256:bdb1b08f4274833d62c1aa29e20907365a2ceb950410df15fc9521bad440122b", size = 1787723, upload-time = "2026-02-05T02:20:16.416Z" },
 ]
 
 [[package]]

@@ -20,7 +20,7 @@ requires-python = ">=3.10, <3.14"
 dependencies = [
     "huggingface_hub",
     "loguru",
-    "misaki[en]>=0.9.4",
+    "misaki[en,de]>=0.9.4",
     "numpy",
     "torch",
     "transformers"
@@ -38,3 +38,6 @@ only-packages = true
 Homepage = "https://github.com/semidark/kokoro-deutsch"
 Repository = "https://github.com/semidark/kokoro-deutsch"
 Upstream = "https://github.com/hexgrad/kokoro"
+
+[tool.uv.sources]
+misaki = { git = "https://github.com/semidark/misaki.git", branch = "main" }
