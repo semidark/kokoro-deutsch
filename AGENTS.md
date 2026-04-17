@@ -122,14 +122,15 @@ No linter or formatter is configured. Follow the existing conventions observed i
 ## Project Structure
 
 ```
-kokoro/              # Fork submodule root (contains nested Python package `kokoro/`)
-  __init__.py        # Version, logging setup, public exports (KModel, KPipeline)
-  __main__.py        # CLI entry point
-  pipeline.py        # KPipeline: G2P + voice management + inference orchestration
-  model.py           # KModel: neural network, weight loading, forward pass
-  modules.py         # CustomAlbert, ProsodyPredictor, TextEncoder
-  istftnet.py        # ISTFT-based vocoder (Decoder, Generator, TorchSTFT)
-  custom_stft.py     # ONNX-compatible STFT (no unfold/complex ops)
+kokoro/              # Kokoro fork (git submodule: semidark/kokoro, branch main)
+  kokoro/            # Nested Python package
+    __init__.py      # Version, logging setup, public exports (KModel, KPipeline)
+    __main__.py      # CLI entry point
+    pipeline.py      # KPipeline: G2P + voice management + inference orchestration
+    model.py         # KModel: neural network, weight loading, forward pass
+    modules.py       # CustomAlbert, ProsodyPredictor, TextEncoder
+    istftnet.py      # ISTFT-based vocoder (Decoder, Generator, TorchSTFT)
+    custom_stft.py   # ONNX-compatible STFT (no unfold/complex ops)
 StyleTTS2/           # Training code (git submodule: semidark/StyleTTS2, branch main)
 scripts/             # Original: dataset prep, voicepack extraction, inference testing
   prepare_dataset.py # Audio processing + IPA phonemization pipeline
@@ -145,6 +146,10 @@ docs/                # Documentation
   ARCHITECTURE.md    # Technical compatibility reference
   images/            # TensorBoard screenshots
 ```
+
+Note: `demo/`, `examples/`, `kokoro.js/`, and `tests/` from upstream Kokoro are
+not included — this repo focuses on the training recipe. Those files live in the
+upstream `hexgrad/kokoro` repository.
 
 ## Key Technical Details
 
