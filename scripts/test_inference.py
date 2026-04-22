@@ -27,6 +27,12 @@ import argparse
 import sys
 from pathlib import Path
 
+# Prefer the kokoro submodule over any pip-installed kokoro package
+_repo_root = Path(__file__).resolve().parents[1]
+_kokoro_submodule = _repo_root / "kokoro"
+if _kokoro_submodule.exists() and str(_kokoro_submodule) not in sys.path:
+    sys.path.insert(0, str(_kokoro_submodule))
+
 # Standard German phonetic test set — covers all major pronunciation challenges
 TEST_SENTENCES = [
     # 1. Umlauts (ä, ö, ü) and sch
